@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FlickGuesser</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    </head>
+    <body>
+        <div>
+            <img src="{{ link }}">
+        </div>
+
+        <div id="map" style="height: 350px; width: 350px;"></div>
+
+        <input type="submit" value="Guess!" onclick="guess()">
+
+        <script>
+            var newMarker = {}
+            var lat = 0;
+            var lng = 0;
+            var map = L.map('map').setView([0, 0], 1);
+    
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            map.on('click', function(e){
+                var coord = e.latlng;
+                lat = coord.lat;
+                lng = coord.lng;
+                
+                if (newMarker != {}) {
+                    map.removeLayer(newMarker);
+                }
+                newMarker = new L.marker(e.latlng).addTo(map);
+            });
+
+            async function postData(url = '', data = {}) {
+
+                const response = await fetch(url, {
+                method: 'POST',
+                cache: 'no-cache',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify(data)
+            });
+
+            return response.json(); 
+            }
+
+            function guess() {
+                postData('/guess', {}).then(data => {
+                    var greenIcon = new L.Icon({
+                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41]
+                    });
+
+                    L.marker(data.coords, {icon: greenIcon}).addTo(map);
+                });
+            }
+
+        </script>
+        
+        
+
+    </body>
+    
+</html>
