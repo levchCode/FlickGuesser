@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FlickGuesser</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script src="static/js/main.js"></script>
+        <link rel="stylesheet" href="static/css/style.css">
+    </head>
+    <body>
+        <h2>Where was this image taken?</h2>
+
+        <div class="image">
+            <img src="{{ link }}" alt="where is it">
+        </div>
+
+        <div id="map" class="map"></div>
+
+        <input type="submit" value="Guess!" onclick="guess()">
+    </body>
+</html>
